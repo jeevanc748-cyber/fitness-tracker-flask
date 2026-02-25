@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitForge Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1abc9c, #3498db);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            color: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        .chart-container {
+            width: 70%;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>FitForge Dashboard</h1>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Weight</th>
+        <th>Height</th>
+        <th>BMI</th>
+        <th>Category</th>
+        <th>Workout</th>
+        <th>Duration</th>
+        <th>Calories</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td>{{ user[1] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td>{{ user[4] }}</td>
+        <td>{{ user[5] }}</td>
+        <td>{{ user[6] }}</td>
+        <td>{{ user[7] }}</td>
+        <td>{{ user[8] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="chart-container">
+    <h2 style="color:black;text-align:center;">BMI Chart</h2>
+    <canvas id="bmiChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h2 style="color:black;text-align:center;">Calories Burned Chart</h2>
+    <canvas id="calorieChart"></canvas>
+</div>
+
+<script>
+const names = {{ names | safe }};
+const bmis = {{ bmis | safe }};
+const calories = {{ calories | safe }};
+
+new Chart(document.getElementById('bmiChart'), {
+    type: 'bar',
+    data: {
+        labels: names,
+        datasets: [{
+            label: 'BMI',
+            data: bmis,
+            backgroundColor: '#4CAF50',
+            borderRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+new Chart(document.getElementById('calorieChart'), {
+    type: 'bar',
+    data: {
+        labels: names,
+        datasets: [{
+            label: 'Calories Burned',
+            data: calories,
+            backgroundColor: '#FF5722',
+            borderRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+<a href="/">Back to Home</a>
+
+</body>
+</html>
